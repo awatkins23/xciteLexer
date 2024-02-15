@@ -22,18 +22,18 @@ Lexeme 	Token Description
 = 	assignment
 , 	comma
 ! 	exclamation
-\> 	greater than
+> 	greater than
 < 	less than
-\>= 	greater than or equal to
+>= 	greater than or equal to
 <= 	less than or equal to
 == 	is equal to
 ( 	open parenthesis
 ) 	close parenthesis
 { 	open curly brace
 } 	close curly brace
-\+ 	addition
-\- 	subtraction
++ 	addition
+- 	subtraction
 / 	division
-\* 	multiplication
+* 	multiplication
 % 	modulus
 ```
