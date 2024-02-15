@@ -4,6 +4,14 @@ import re
 def validateToken(token):
     if re.search("\".*\"", token):
         return "string literal"
+    if re.search("\'.\'", token):
+        return "char literal"
+    elif re.search("[0-9]+[.][0-9]+", token):
+        return "float literal"
+    elif re.search("[0-9]+", token):
+        return "int literal"
+    elif re.search("@[a-zA-Z_]+", token):
+        return "identifier"
     else:
         try:
             return language[token]
@@ -12,15 +20,42 @@ def validateToken(token):
 
 language = {
     "INT": "INT keyword",
-    "=": "assignment",
-    "!": "exclamation",
+    "BOOL": "BOOL keyword", 
+    "FLOAT": "FLOAT keyword", 
+    "CHAR": "CHAR keyword", 
+    "STRING": "STRING keyword",
+    "ARRAY": "ARRAY keyword",
+    "WHILE": "WHILE keyword", 
+    "IF": "IF keyword", 
+    "ELSE": "ELSE keyword", 
+    "TRUE": "TRUE keyword", 
+    "FALSE": "FALSE keyword", 
+    "NOT": "NOT keyword", 
+    "AND": "AND keyword", 
+    "OR": "OR keyword",
     "PRINT": "PRINT keyword",
+    "[": "open square bracket",
+    "]": "close square bracket",
+    "=": "assignment",
+    ",": "comma",
+    "!": "exclamation",
+    ">": "greater than",
+    "<": "less than",
+    ">=": "greater than or equal to",
+    "<=": "less than or equal to",
+    "==": "is equal to",
     "(": "open parenthesis",
     ")": "close parenthesis",
-    "!": "exclamation"
+    "{": "open curly brace",
+    "}": "close curly brace",
+    "+": "addition",
+    "-": "subtraction",
+    "/": "division",
+    "*": "multiplication",
+    "%": "modulus"
 }
 tokens = []
-separators = " !(),\n"
+separators = "[]=,!><()\{\}+-/*%\n "
 
 try:
     path = sys.argv[1]
