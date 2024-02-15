@@ -14,7 +14,7 @@ Floating-point Literals: Float literals consist of numeric digits (0-9) with a s
 Identifiers: Identifiers must start with the @ symbol. After the @ symbol, they can consist only of lowercase letters and underscores. There must be at least one character after the @ symbol.
 
 Comments: Start with dollar sign symbol...
-
+```
 Operators & Separator Symbols:
 Lexeme 	Token Description
 [ 	open square bracket
@@ -22,17 +22,18 @@ Lexeme 	Token Description
 = 	assignment
 , 	comma
 ! 	exclamation
-> 	greater than
+\> 	greater than
 < 	less than
->= 	greater than or equal to
+\>= 	greater than or equal to
 <= 	less than or equal to
 == 	is equal to
 ( 	open parenthesis
 ) 	close parenthesis
 { 	open curly brace
 } 	close curly brace
-+ 	addition
-- 	subtraction
+\+ 	addition
+\- 	subtraction
 / 	division
-* 	multiplication
+\* 	multiplication
 % 	modulus
+```
