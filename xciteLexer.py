@@ -55,7 +55,7 @@ language = {
     "%": "modulus"
 }
 tokens = []
-separators = "[]=,!><()\{\}+-/*%\n "
+tokenEnds = "[]=,!><()}{+-/*%\n "
 
 try:
     path = sys.argv[1]
@@ -70,31 +70,40 @@ except:
     sys.exit()
 
 data = file.readlines()
-read = True
+inQuotes = False
 
 for line in data:
-    if read == False:
-        tokens.append(tmp)
-    tmp = ""
-    read = True
+    #if the last line ended while still in quotes, add the built
+    #token to the list of tokens and start fresh on the new line
+    if inQuotes == True:
+        tokens.append(currentToken)
+    currentToken = ""
+    inQuotes = False
     for char in line:
-        if read:
+        #There are three steps:
+        #1. if it is a quote, swap to the quote logic
+        #2. if it isn't one of the tokenEnders, add it to the current token
+        #3. else, it must have found a token end, so the current token is finished
+        if not inQuotes:
             if (char == "\""):
-                read = False
-                tmp += char
-            elif (char not in separators):
-                tmp += char
+                inQuotes = True
+                currentToken += char
+            elif (char not in tokenEnds):
+                currentToken += char
             else:
-                if tmp != "":
-                    tokens.append(tmp)
+                #add the current token to the list of tokens
+                if currentToken != "":
+                    tokens.append(currentToken)
+                #add the found token ender and then clear the current token
                 tokens += char
-                tmp = ""
+                currentToken = ""
         else:
-            tmp += char
+            #building the string until we find another quotation mark
+            currentToken += char
             if (char == "\""):
-                read = True
-                tokens.append(tmp)
-                tmp = ""
+                inQuotes = False
+                tokens.append(currentToken)
+                currentToken = ""
 try:
     while True:
         tokens.remove(' ')
