@@ -1,24 +1,8 @@
 import sys
 import re
 
-def validateToken(token):
-    if re.search("\".*\"", token):
-        return "string literal"
-    if re.search("\'.\'", token):
-        return "char literal"
-    elif re.search("[0-9]+[.][0-9]+", token):
-        return "float literal"
-    elif re.search("[0-9]+", token):
-        return "int literal"
-    elif re.search("@[a-zA-Z_]+", token):
-        return "identifier"
-    else:
-        try:
-            return language[token]
-        except:
-            return "error"
-
-language = {
+keywords = {
+    "PRINT": "PRINT keyword",
     "INT": "INT keyword",
     "BOOL": "BOOL keyword", 
     "FLOAT": "FLOAT keyword", 
@@ -32,8 +16,13 @@ language = {
     "FALSE": "FALSE keyword", 
     "NOT": "NOT keyword", 
     "AND": "AND keyword", 
-    "OR": "OR keyword",
-    "PRINT": "PRINT keyword",
+    "OR": "OR keyword"
+}
+
+separators = {
+    "==":"is equal to",
+    "<=":"less than or equal to",
+    ">=":"greater than or equal to",
     "[": "open square bracket",
     "]": "close square bracket",
     "=": "assignment",
@@ -41,9 +30,6 @@ language = {
     "!": "exclamation",
     ">": "greater than",
     "<": "less than",
-    ">=": "greater than or equal to",
-    "<=": "less than or equal to",
-    "==": "is equal to",
     "(": "open parenthesis",
     ")": "close parenthesis",
     "{": "open curly brace",
@@ -54,8 +40,6 @@ language = {
     "*": "multiplication",
     "%": "modulus"
 }
-tokens = []
-separators = "[]=,!><()\{\}+-/*%\n "
 
 try:
     path = sys.argv[1]
@@ -70,43 +54,67 @@ except:
     sys.exit()
 
 data = file.readlines()
-read = True
 
+lexed_dict = {}
+space = " "
+temp_index = 0
+
+# ACCOUNT FOR COMMENTS
+#####
 for line in data:
-    if read == False:
-        tokens.append(tmp)
-    tmp = ""
-    read = True
-    for char in line:
-        if read:
-            if (char == "\""):
-                read = False
-                tmp += char
-            elif (char not in separators):
-                tmp += char
-            else:
-                if tmp != "":
-                    tokens.append(tmp)
-                tokens += char
-                tmp = ""
+    
+    # QUOTATION LEXER
+    while (temp_index != -1):
+
+        double_index = line.find("\"")
+        single_index = line.find("\'")
+
+        if (double_index, single_index != -1): 
+            temp_index = min(double_index, single_index)
+        elif (double_index, single_index == -1):
+            break
         else:
-            tmp += char
-            if (char == "\""):
-                read = True
-                tokens.append(tmp)
-                tmp = ""
-try:
-    while True:
-        tokens.remove(' ')
-except:
-    print("")
-try:
-    while True:
-        tokens.remove('\n')
-except:
-    print("")
+            temp_index = max(double_index, single_index)
 
-print(tokens)
+        currentQuoteType = line[temp_index]
+        temp_indexEnd = line.find(currentQuoteType, temp_index + 1)
 
-for token in tokens:
-    print(token + ": " + validateToken(token))
+        if (temp_indexEnd == -1):
+            lexed_dict.update({line[temp_index:len(line) - 1]: [temp_index, "error"]})
+            line = line.replace(line[temp_index:len(line) - 1], space * (temp_indexEnd - temp_index + 1))
+            break
+        else:
+            Literal = line[temp_index:temp_indexEnd + 1]
+            line = line.replace(Literal, space * (temp_indexEnd - temp_index + 1))
+
+            if (currentQuoteType == "\""): lexed_dict.update({Literal: [temp_index, "string literal"]})
+            elif (len(Literal) < 2): lexed_dict.update({Literal: [temp_index, "string literal"]})
+            else: lexed_dict.update({Literal: [temp_index, "error"]})
+
+            temp_index = line.find("\"")
+
+    # SEPARATOR LEXER
+    for separator in separators.keys():
+
+        temp_index = line.find(separator)
+
+        while (temp_index != -1):
+            lexed_dict.update({separator: [temp_index, separators[separator]]})
+            line = line.replace(separator, space * len(separator), 1)
+            temp_index = line.find(separator)
+            print(line)
+
+    # IDENTIFIER LEXER
+            # TO BE DONE
+
+    # KEYWORD LEXER
+    for keyword in keywords.keys():
+
+        temp_index = line.find(keyword)
+
+        while (temp_index != -1):
+            lexed_dict.update({keyword: [temp_index, keywords[keyword]]})
+            line = line.replace(keyword, space * len(keyword), 1)
+            temp_index = line.find(keyword)
+            print(line)
+print(lexed_dict)
