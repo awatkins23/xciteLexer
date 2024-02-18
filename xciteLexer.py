@@ -73,10 +73,6 @@ data = file.readlines()
 inQuotes = False
 
 for line in data:
-    #if the last line ended while still in quotes, add the built
-    #token to the list of tokens and start fresh on the new line
-    if inQuotes == True:
-        tokens.append(currentToken)
     currentToken = ""
     inQuotes = False
     for char in line:
@@ -104,6 +100,13 @@ for line in data:
                 inQuotes = False
                 tokens.append(currentToken)
                 currentToken = ""
+    #if the last line ended while still in quotes, add the built
+    #token to the list of tokens and start fresh on the new line
+    if inQuotes == True or currentToken != "":
+        tokens.append(currentToken)
+
+
+
 try:
     while True:
         tokens.remove(' ')
@@ -114,6 +117,11 @@ try:
         tokens.remove('\n')
 except:
     print("")
+
+for i in range(0, len(tokens) - 1):
+    if ((tokens[i] == '>' or tokens[i] == '<' or tokens[i] == '=') and i != len(tokens) - 1 and tokens[i+1] == '='):
+        tokens[i] = tokens[i] + tokens[i+1]
+        del tokens[i+1]
 
 print(tokens)
 

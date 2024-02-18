@@ -1,7 +1,9 @@
 PRINT("Hello World")!
 PRINT ( "Hello World" ) !
 INT @x = 5 + 10!
-WHILE () {
+WHILE (@x >= 5) {
     INT @_!
     PRINT(@_)!
 }
+'a'
+'aa'
