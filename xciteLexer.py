@@ -71,18 +71,38 @@ except:
 
 data = file.readlines()
 inQuotes = False
+inSingleQuotes = False
 
 for line in data:
     currentToken = ""
     inQuotes = False
+    inSingleQuotes = False
     for char in line:
-        #There are three steps:
+        #There are four steps:
         #1. if it is a quote, swap to the quote logic
-        #2. if it isn't one of the tokenEnders, add it to the current token
-        #3. else, it must have found a token end, so the current token is finished
-        if not inQuotes:
+        #2. if it is a single quote, swap to the single quote logic
+        #3. if it isn't one of the tokenEnders, add it to the current token
+        #4. else, it must have found a token end, so the current token is finished
+        if inQuotes:
+            #building the string until we find another quotation mark
+            currentToken += char
+            if (char == "\""):
+                inQuotes = False
+                tokens.append(currentToken)
+                currentToken = ""
+        elif inSingleQuotes:
+            #building the string until we find another quotation mark
+            currentToken += char
+            if (char == "\'"):
+                inSingleQuotes = False
+                tokens.append(currentToken)
+                currentToken = ""
+        else:
             if (char == "\""):
                 inQuotes = True
+                currentToken += char
+            elif (char == "\'"):
+                inSingleQuotes = True
                 currentToken += char
             elif (char not in tokenEnds):
                 currentToken += char
@@ -92,13 +112,6 @@ for line in data:
                     tokens.append(currentToken)
                 #add the found token ender and then clear the current token
                 tokens += char
-                currentToken = ""
-        else:
-            #building the string until we find another quotation mark
-            currentToken += char
-            if (char == "\""):
-                inQuotes = False
-                tokens.append(currentToken)
                 currentToken = ""
     #if the last line ended while still in quotes, add the built
     #token to the list of tokens and start fresh on the new line
