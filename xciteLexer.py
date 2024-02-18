@@ -57,21 +57,24 @@ data = file.readlines()
 
 lexed_dict = {}
 space = " "
-temp_index = 0
 
 # ACCOUNT FOR COMMENTS
 #####
 for line in data:
+
+    temp_index = 0
     
     # QUOTATION LEXER
     while (temp_index != -1):
 
+        # NEED TO ENSURE THAT QUOTES ARE HANDLED IN ORDER OF WHICH COMES FIRST
         double_index = line.find("\"")
         single_index = line.find("\'")
 
-        if (double_index, single_index != -1): 
+        # IF QUOTE THEN CONTINUE
+        if ((double_index | single_index) != -1): 
             temp_index = min(double_index, single_index)
-        elif (double_index, single_index == -1):
+        elif ((double_index & single_index) == -1):
             break
         else:
             temp_index = max(double_index, single_index)
@@ -82,6 +85,7 @@ for line in data:
         if (temp_indexEnd == -1):
             lexed_dict.update({line[temp_index:len(line) - 1]: [temp_index, "error"]})
             line = line.replace(line[temp_index:len(line) - 1], space * (temp_indexEnd - temp_index + 1))
+            print(line)##
             break
         else:
             Literal = line[temp_index:temp_indexEnd + 1]
@@ -90,8 +94,7 @@ for line in data:
             if (currentQuoteType == "\""): lexed_dict.update({Literal: [temp_index, "string literal"]})
             elif (len(Literal) < 2): lexed_dict.update({Literal: [temp_index, "string literal"]})
             else: lexed_dict.update({Literal: [temp_index, "error"]})
-
-            temp_index = line.find("\"")
+            print(line)##
 
     # SEPARATOR LEXER
     for separator in separators.keys():
@@ -102,7 +105,7 @@ for line in data:
             lexed_dict.update({separator: [temp_index, separators[separator]]})
             line = line.replace(separator, space * len(separator), 1)
             temp_index = line.find(separator)
-            print(line)
+            print(line)##
 
     # IDENTIFIER LEXER
             # TO BE DONE
@@ -116,5 +119,5 @@ for line in data:
             lexed_dict.update({keyword: [temp_index, keywords[keyword]]})
             line = line.replace(keyword, space * len(keyword), 1)
             temp_index = line.find(keyword)
-            print(line)
+            print(line)##
 print(lexed_dict)
