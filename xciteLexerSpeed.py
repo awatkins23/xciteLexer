@@ -1,5 +1,4 @@
 import handlingProcesses
 import sys
 
-fileRead(sys.argv)
-
+handlingProcesses.readArgs(sys.argv)
