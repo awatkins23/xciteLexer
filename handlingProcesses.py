@@ -1,9 +1,47 @@
 import time
+import re
 
 keywordSeparators = ["<=" , ">=" , "==" , "[" , "]" , "=" , "," , "!" , ">",
               "<" , "(" , ")" , "{" , "}" , "+" , "-" , "/" , "*" , "%",
               "PRINT","INT","BOOL", "FLOAT", "CHAR", "STRING", "ARRAY",
             "WHILE","IF", "ELSE", "TRUE", "FALSE", "NOT", "AND", "OR"]
+
+language = {
+    "INT": "INT Keyword",
+    "BOOL": "BOOL Keyword", 
+    "FLOAT": "FLOAT Keyword", 
+    "CHAR": "CHAR Keyword", 
+    "STRING": "STRING Keyword",
+    "ARRAY": "ARRAY Keyword",
+    "WHILE": "WHILE Keyword", 
+    "IF": "IF Keyword", 
+    "ELSE": "ELSE Keyword", 
+    "TRUE": "TRUE Keyword", 
+    "FALSE": "FALSE Keyword", 
+    "NOT": "NOT Keyword", 
+    "AND": "AND Keyword", 
+    "OR": "OR Keyword",
+    "PRINT": "PRINT Keyword",
+    "[": "Open Square Bracket",
+    "]": "Close Square Bracket",
+    "=": "Assignment",
+    ",": "Comma",
+    "!": "Exclamation",
+    ">": "Greater Than",
+    "<": "Less Than",
+    ">=": "Greater Than or Equal To",
+    "<=": "Less Than or Equal To",
+    "==": "Is Equal To",
+    "(": "Open Parenthesis",
+    ")": "Close Parenthesis",
+    "{": "Open Curly Brace",
+    "}": "Close Curly Brace",
+    "+": "Addition",
+    "-": "Subtraction",
+    "/": "Division",
+    "*": "Multiplication",
+    "%": "Modulus"
+}
 
 subStrings = []
 currentProgram = ""
@@ -124,6 +162,36 @@ def indentifierParser():
             currentIndex += 1
         subStringsLength = len(subStrings)
 
+def integerFloatParser():
+    currentIndex = 0
+    while (currentIndex < subStringsLength):
+        if subStrings[currentIndex][0] != True:
+            subString = subStrings[currentIndex][1]
+
+            if(subString.isdigit()):
+                divideStringsFromToken(currentIndex, 0, len(subString))
+                currentIndex += 1
+                continue
+            #LOOP AND CHECK WHETHER THERE IS A DIGIT NEGATIVE OR DECIMAL
+
+def defineTokensWithOutput():
+    for string in subStrings:
+        if re.search("\".*\"", string[1]):
+            print(f"String Literal : {string[1]}")
+        elif re.search("\'.\'", string[1]):
+            print(f"Char Literal : {string[1]}")
+        elif re.search("[0-9]+[.][0-9]+", string[1]):
+            print(f"Float Literal : {string[1]}")
+        elif re.search("[0-9]+", string[1]):
+            print(f"Int Literal : {string[1]}")
+        elif re.search("@[a-zA-Z_]+", string[1]):
+            print(f"Identifier : {string[1]}")
+        else:
+            try:
+                print(f"{language[string[1]]} : {string[1]}")
+            except:
+                print(f"Error : {string[1]}")
+
 def lex(file):
 
     global subStrings
@@ -148,7 +216,7 @@ def lex(file):
         indentifierParser()
 
     end_time = time.time()
-    print(f'     TOKENIZATION FOR "{currentProgram}" TOOK {end_time - start_time}\n')
-    for string in subStrings:
-        print(f"{string[0]} : {string[1]}")
+    print(f'\nTOKENIZATION FOR "{currentProgram}" TOOK {end_time - start_time}\n')
+    defineTokensWithOutput()
+
     
