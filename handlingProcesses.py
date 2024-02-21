@@ -127,7 +127,6 @@ def keywordSeperatorParser():
 
 def indentifierParser():
     subStringsLength = len(subStrings)
-    subStringsLength = len(subStrings)
     currentIndex = 0
 
     while (currentIndex < subStringsLength):
@@ -163,16 +162,41 @@ def indentifierParser():
         subStringsLength = len(subStrings)
 
 def integerFloatParser():
+    subStringsLength = len(subStrings)
     currentIndex = 0
+
     while (currentIndex < subStringsLength):
+
         if subStrings[currentIndex][0] != True:
             subString = subStrings[currentIndex][1]
 
             if(subString.isdigit()):
                 divideStringsFromToken(currentIndex, 0, len(subString))
                 currentIndex += 1
-                continue
-            #LOOP AND CHECK WHETHER THERE IS A DIGIT NEGATIVE OR DECIMAL
+
+            else:
+                float = re.findall("[-]*[0-9]+[.][0-9]+", subString)
+                integer = re.findall("[-]*[0-9]+[.]*[0-9]+", subString)
+                print(subString)
+                if ((float != [])):
+                    print(f"FLOAT*: {float} INTEGER: {integer}")
+                    startOfToken = subString.find(float[0])
+                    endOfToken = startOfToken + len(float[0])
+                    divideStringsFromToken(currentIndex, startOfToken, endOfToken)
+                    currentIndex +=1
+
+                elif (integer != []):
+                    print(f"FLOAT: {float} INTEGER*: {integer}")
+                    startOfToken = subString.find(integer[0])
+                    endOfToken = startOfToken + len(integer[0])
+                    divideStringsFromToken(currentIndex, startOfToken, endOfToken)
+                    currentIndex += 1
+
+                else:
+                    currentIndex += 1
+        else:
+            currentIndex += 1
+        subStringsLength = len(subStrings)
 
 def defineTokensWithOutput():
     for string in subStrings:
@@ -180,9 +204,9 @@ def defineTokensWithOutput():
             print(f"String Literal : {string[1]}")
         elif re.search("\'.\'", string[1]):
             print(f"Char Literal : {string[1]}")
-        elif re.search("[0-9]+[.][0-9]+", string[1]):
+        elif re.search("^[-]?(0[.]|[1-9][0-9][.])[0-9]*", string[1]):
             print(f"Float Literal : {string[1]}")
-        elif re.search("[0-9]+", string[1]):
+        elif re.search("^[-]?[1-9][0-9]*", string[1]):
             print(f"Int Literal : {string[1]}")
         elif re.search("@[a-zA-Z_]+", string[1]):
             print(f"Identifier : {string[1]}")
@@ -211,7 +235,7 @@ def lex(file):
         quoteParser(line)
 
         # MUST DEAL WITH COMMENTS RIGHT AFTER QUOTE
-
+        integerFloatParser()
         keywordSeperatorParser()
         indentifierParser()
 
