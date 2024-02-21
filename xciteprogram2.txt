@@ -1,5 +1,10 @@
-PRIN$T("Hello hello! "yup" "@@)!
-YEL@L( "Bepp 'boop' " )!@yfdbdf@ye1
--0
--0.0
-PRINT("HELLOWORLD")
+ $""
+ \t$\t
+ \p$
+ \n$
+ \t$" "'#'$
+ '@hi
+ @hel$lo\n
+ INT#"PRI$NT+NOT
+
+

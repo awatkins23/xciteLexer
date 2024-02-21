@@ -1,4 +1,3 @@
-import time
 import re
 
 keywordSeparators = ["<=" , ">=" , "==" , "[" , "]" , "=" , "," , "!" , ">",
@@ -59,7 +58,7 @@ def readArgs(pathArgs):
         except:
             print(f'File not found at \"{pathArgs[x]}\"')
             exit()
-        start_time = time.time()
+        print(f"\nRESULTS OF LEXICAL ANALYSIS FOR {pathArgs[x]}\n")
         lex(file)
 
 def divideStringsFromToken(subStringIndex, startOfToken, endOfToken):
@@ -103,27 +102,30 @@ def quoteParser(line):
         startOfToken = max(double_index, single_index)
         endOfToken = subString.find(subString[startOfToken], startOfToken + 1)
 
-    if(endOfToken != -1):
-        if(comment_index != -1):
-            divideStringsFromToken(subStringIndex, 0, comment_index)
+    if(comment_index != -1):
+            divideStringsFromToken(subStringIndex, comment_index, len(subString))
             del subStrings[subStringIndex + 1]
-        else:
-            divideStringsFromToken(subStringIndex, startOfToken, endOfToken + 1)
+            return
+    if(endOfToken != -1):
+        divideStringsFromToken(subStringIndex, startOfToken, endOfToken + 1)
 
 
 def keywordSeperatorParser():
     for token in keywordSeparators:
-        subStringsLength = len(subStrings) - 1
+        subStringsLength = len(subStrings)
+        currentIndex = 0
 
-        for currentIndex in range(0,subStringsLength + 1):
-            subStringsLength = len(subStrings)
+        while (currentIndex < subStringsLength):
 
             if subStrings[currentIndex][0] != True:
                 startOfToken = subStrings[currentIndex][1].find(token)
-
                 if(startOfToken != -1):
                     endOfToken = startOfToken + len(token)
                     divideStringsFromToken(currentIndex, startOfToken, endOfToken)
+                    subStringsLength = len(subStrings)
+                currentIndex += 1
+            else:
+                currentIndex += 1
 
 def indentifierParser():
     subStringsLength = len(subStrings)
@@ -175,18 +177,15 @@ def integerFloatParser():
                 currentIndex += 1
 
             else:
-                float = re.findall("[-]*[0-9]+[.][0-9]+", subString)
-                integer = re.findall("[-]*[0-9]+[.]*[0-9]+", subString)
-                print(subString)
+                float = re.findall("[-]?[0-9]+[.][0-9]+", subString)
+                integer = re.findall("[-]?[0-9]+[.]?[.0-9]*", subString)
                 if ((float != [])):
-                    print(f"FLOAT*: {float} INTEGER: {integer}")
                     startOfToken = subString.find(float[0])
                     endOfToken = startOfToken + len(float[0])
                     divideStringsFromToken(currentIndex, startOfToken, endOfToken)
                     currentIndex +=1
 
                 elif (integer != []):
-                    print(f"FLOAT: {float} INTEGER*: {integer}")
                     startOfToken = subString.find(integer[0])
                     endOfToken = startOfToken + len(integer[0])
                     divideStringsFromToken(currentIndex, startOfToken, endOfToken)
@@ -200,15 +199,15 @@ def integerFloatParser():
 
 def defineTokensWithOutput():
     for string in subStrings:
-        if re.search("\".*\"", string[1]):
+        if re.search("^\".*\"", string[1]):
             print(f"String Literal : {string[1]}")
-        elif re.search("\'.\'", string[1]):
+        elif re.search("^\'.\'", string[1]):
             print(f"Char Literal : {string[1]}")
         elif re.search("^[-]?(0[.]|[1-9][0-9][.])[0-9]*", string[1]):
             print(f"Float Literal : {string[1]}")
         elif re.search("^[-]?[1-9][0-9]*", string[1]):
             print(f"Int Literal : {string[1]}")
-        elif re.search("@[a-zA-Z_]+", string[1]):
+        elif re.search("^@[a-zA-Z_]+", string[1]):
             print(f"Identifier : {string[1]}")
         else:
             try:
@@ -217,30 +216,21 @@ def defineTokensWithOutput():
                 print(f"Error : {string[1]}")
 
 def lex(file):
-
     global subStrings
-
-    subStrings.clear()
+    
     program = file.readlines()
 
     for line in program:
-        
         line = line.strip()
 
         if(line == ""):
             continue
-
-
         subStrings.append((False, line))
         quoteParser(line)
-
-        # MUST DEAL WITH COMMENTS RIGHT AFTER QUOTE
         integerFloatParser()
         keywordSeperatorParser()
         indentifierParser()
-
-    end_time = time.time()
-    print(f'\nTOKENIZATION FOR "{currentProgram}" TOOK {end_time - start_time}\n')
     defineTokensWithOutput()
+    subStrings.clear()
 
     
