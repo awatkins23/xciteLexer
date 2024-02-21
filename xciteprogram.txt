@@ -1,11 +1,12 @@
-#@@@#x
-Y'EET   @
+  $@@@$x"'
+"Y'EET   "@
 IN'T @x@@y = 5 + 10!@y
-W@HILE () {
- 10B
-"   "##"#'"    
+'W@HILE () {'
+ 10  B
+""$
+"   "$$"$'"    
     INT '@_???@!@xxx_@
-#"Hello n#'my name"#HellllINTllloo
+$"Hello n$'my name"$HellllINTllloo
 is"@uj
 
 

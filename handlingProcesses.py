@@ -46,10 +46,15 @@ def quoteParser(line):
 
     subStringIndex = subStrings.index((False, line))
     subString = subStrings[subStringIndex][1]
+    comment_index = line.find("$")
     double_index = line.find("\"")
     single_index = line.find("\'")
 
-    if ((double_index & single_index) == -1):
+    if (comment_index == 0):
+        del subStrings[subStringIndex]
+        return
+
+    if ((double_index & single_index & comment_index) == -1):
         return
     
     elif ((double_index | single_index) != -1):
@@ -60,14 +65,13 @@ def quoteParser(line):
         startOfToken = max(double_index, single_index)
         endOfToken = subString.find(subString[startOfToken], startOfToken + 1)
 
-    if(endOfToken == -1):
-        divideStringsFromToken(subStringIndex, startOfToken, -1)
+    if(endOfToken != -1):
+        if(comment_index != -1):
+            divideStringsFromToken(subStringIndex, 0, comment_index)
+            del subStrings[subStringIndex + 1]
+        else:
+            divideStringsFromToken(subStringIndex, startOfToken, endOfToken + 1)
 
-    else:
-        divideStringsFromToken(subStringIndex, startOfToken, endOfToken + 1)
-
-        if(subStringIndex + 2 < len(subStrings)):
-            quoteParser(subStrings[subStringIndex + 2][1])
 
 def keywordSeperatorParser():
     for token in keywordSeparators:

@@ -1,2 +1,2 @@
-PRINT("Hello hello! "yup" "@@)!
+PRIN$T("Hello hello! "yup" "@@)!
 YEL@L( "Bepp 'boop' " )!@yfdbdf@ye1
