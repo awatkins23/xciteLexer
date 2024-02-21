@@ -1,10 +1,20 @@
-<= PRINT("Hello'' World")!
-PRINT ( "Hello World" ) !
-INT @x = 5 + 10!
-WHILE () {
-    INT @_!
-    PRINT(@_)!
-}
+@@@#x
+YEET   @
+INT @x@@y = 5 + 10!@y
+W@HILE () {
+
+    
+    INT @_???@!@xxx_@
+"Hello n#my name"#HellllINTllloo
+is@uj
 
 
+
+
+
+
+
+
+
+"hello"
 
