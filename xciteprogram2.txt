@@ -1,0 +1,10 @@
+ $""
+ \t$\t
+ \p$
+ \n$
+ \t$" "'#'$
+ '@hi
+ @hel$lo\n
+ INT#"PRI$NT+NOT
+
+

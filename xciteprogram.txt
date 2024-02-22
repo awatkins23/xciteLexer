@@ -1,9 +1,26 @@
-PRINT("Hello World"'a')!
-PRINT ( "Hello World" ) !
-INT @x = 5 + 10!
-WHILE (@x >= 5) {
-    INT @_!
-    PRINT(@_)!
-}
-'a'
-'aa'
+  $@@@$x"'
+  -0
+                   "Y'EET   "@
+ 10.0
+ 12.0-0
+     IN'T @x@@y = 5 + -10!@y
+ 'W@HI0.0LE () {'
+000010.0
+24.012b 10.0
+ 10  B
+ 4.
+""$
+"   "$$"$'"    
+    INT '@_???@!@xxx_@
+                   "Hello n$'my name"$HellllINTllloo
+is"@uj
+
+
+
+
+
+
+
+
+
+"hello"
