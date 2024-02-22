@@ -14,7 +14,8 @@
     INT '@_???@!@xxx_@
                    "Hello n$'my name"$HellllINTllloo
 is"@uj
-
+PRINT("$")
+PRINT("Hello"$"World")
 
 
 

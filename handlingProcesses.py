@@ -98,12 +98,14 @@ class Lexer:
             startOfToken = max(double_index, single_index)
             endOfToken = subString.find(subString[startOfToken], startOfToken + 1)
 
-        if(comment_index != -1):
-                self.divideStringsFromToken(subStringIndex, comment_index, len(subString))
-                del self.subStrings[subStringIndex + 1]
-                return
         if(endOfToken != -1):
-            self.divideStringsFromToken(subStringIndex, startOfToken, endOfToken + 1)
+            if((comment_index < startOfToken)):
+                self.divideStringsFromToken(subStringIndex, comment_index, len(subString))
+                if(self.subStrings[subStringIndex + 1] == False):
+                    print(f"YEET: {self.subStrings[subStringIndex + 1]}")
+                    del self.subStrings[subStringIndex + 1]
+            else:
+                self.divideStringsFromToken(subStringIndex, startOfToken, endOfToken + 1)
 
 
     def keywordSeperatorParser(self):
@@ -195,6 +197,8 @@ class Lexer:
 
     def defineTokensWithOutput(self):
         for string in self.subStrings:
+            if(string[1][0] == "$"):
+                continue
             if re.search("^\".*\"", string[1]):
                 self.lexTable.append((string[1],"String Literal"))
             elif re.search("^\'.\'", string[1]):
