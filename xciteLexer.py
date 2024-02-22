@@ -55,6 +55,7 @@ except:
 
 data = file.readlines()
 
+
 lexed_dict = []
 space = " "
 start_index = 0
@@ -62,6 +63,7 @@ start_index = 0
 # ACCOUNT FOR COMMENTS
 #####
 for line in data:
+
 
     temp_index = 0
     
